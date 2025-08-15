@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   '';
   meta = with lib; {
     description = "GTA III engine";
+    license = licenses.unfree;
     homepage = "https://archive.org/details/github.com-GTAmodding-re3_-_2021-09-06_14-11-00";
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];

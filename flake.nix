@@ -9,7 +9,7 @@
   outputs = { self, nixpkgs, ... }@attrs:
   let
     system = "x86_64-linux";
-    pkgs = nixpkgs.legacyPackages.${system};
+    pkgs = import nixpkgs { inherit system; config.allowUnfree = true; };
     wrapWine = attrs.nur.legacyPackages.${system}.repos.lucasew.packages.wrapWine;
     localPkgs = import ./default.nix { inherit pkgs wrapWine; };
   in {
