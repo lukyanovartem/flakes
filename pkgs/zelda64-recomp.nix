@@ -7,10 +7,13 @@
 }:
 
 let
-  rom = requireFile {
+  rom = requireFile rec {
     name = "mm.n64.us.1.0.z64";
     sha256 = "0arzwhxmxgyy6w56dgm5idlchp8zs6ia3yf02i2n0qp379dkdcgg";
-    message = "sha1sum d6133ace5afaa0882cf214cf88daba39e266c078";
+    message = ''
+      $ sha1sum ${name}
+      d6133ace5afaa0882cf214cf88daba39e266c078 ${name}
+    '';
   };
   z64decompress = stdenv.mkDerivation rec {
     pname = "z64decompress";
