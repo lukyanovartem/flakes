@@ -67,10 +67,10 @@ let
   };
   zelda64-recomp-run = ''
     config="''${XDG_CONFIG_HOME:-''$HOME/.config}"/Zelda64Recompiled
-    if [[ ! -f "$config"/mm.n64.us.1.0.z64 ]]; then
+    if [[ ! -d "$config" ]]; then
       mkdir -p "$config"
-      ln -s ${rom} "$config"/mm.n64.us.1.0.z64
     fi
+    ln -sf ${rom} "$config"/mm.n64.us.1.0.z64
   '';
 in clangStdenv.mkDerivation rec {
   pname = "zelda64-recomp";
