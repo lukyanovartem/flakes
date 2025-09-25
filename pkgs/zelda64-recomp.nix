@@ -13,6 +13,7 @@ let
     message = ''
       $ sha1sum ${name}
       d6133ace5afaa0882cf214cf88daba39e266c078 ${name}
+      $ nix-store --add-fixed sha256 ${name}
     '';
   };
   z64decompress = stdenv.mkDerivation rec {
