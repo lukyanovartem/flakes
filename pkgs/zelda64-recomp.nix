@@ -65,6 +65,7 @@ let
       homepage = "https://github.com/N64Recomp/N64Recomp";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ ];
+      mainProgram = "N64Recomp";
       platforms = lib.platforms.all;
     };
   };
@@ -98,7 +99,7 @@ in clangStdenv.mkDerivation rec {
     sed -i 's#set (DXC "LD_LIBRARY_PATH=''${PROJECT_SOURCE_DIR}/lib/rt64/src/contrib/dxc/lib/x64" "''${PROJECT_SOURCE_DIR}/lib/rt64/src/contrib/dxc/bin/x64/dxc-linux")#set (DXC "${lib.getExe' directx-shader-compiler "dxc"}")#' CMakeLists.txt
     sed -i 's#set (DXC "LD_LIBRARY_PATH=''${PROJECT_SOURCE_DIR}/src/contrib/dxc/lib/x64" "''${PROJECT_SOURCE_DIR}/src/contrib/dxc/bin/x64/dxc-linux")#set (DXC "${lib.getExe' directx-shader-compiler "dxc"}")#' ./lib/rt64/CMakeLists.txt
     ${lib.getExe z64decompress} ${rom} mm.us.rev1.rom_uncompressed.z64
-    ln -s ${lib.getExe' n64recomp "N64Recomp"}
+    ln -s ${lib.getExe n64recomp}
     ln -s ${lib.getExe' n64recomp "RSPRecomp"}
     ./N64Recomp us.rev1.toml
     ./RSPRecomp aspMain.us.rev1.toml
