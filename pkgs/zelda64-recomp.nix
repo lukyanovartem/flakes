@@ -62,7 +62,6 @@ let
       homepage = "https://github.com/N64Recomp/N64Recomp";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ ];
-      mainProgram = "n64-recomp";
       platforms = lib.platforms.all;
     };
   };
@@ -121,7 +120,7 @@ in clangStdenv.mkDerivation rec {
     homepage = "https://github.com/Zelda64Recomp/Zelda64Recomp";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ ];
-    mainProgram = "zelda64-recomp";
+    mainProgram = "Zelda64Recompiled";
     platforms = lib.platforms.all;
   };
 }
