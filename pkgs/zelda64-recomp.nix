@@ -40,7 +40,7 @@ let
       platforms = lib.platforms.all;
     };
   };
-  n64recomp = stdenv.mkDerivation rec {
+  n64-recomp = stdenv.mkDerivation rec {
     pname = "n64-recomp";
     version = "mod-tool-release";
 
@@ -100,10 +100,10 @@ in clangStdenv.mkDerivation rec {
     sed -i 's#set (DXC "LD_LIBRARY_PATH=''${PROJECT_SOURCE_DIR}/lib/rt64/src/contrib/dxc/lib/x64" "''${PROJECT_SOURCE_DIR}/lib/rt64/src/contrib/dxc/bin/x64/dxc-linux")#set (DXC "${lib.getExe' directx-shader-compiler "dxc"}")#' CMakeLists.txt
     sed -i 's#set (DXC "LD_LIBRARY_PATH=''${PROJECT_SOURCE_DIR}/src/contrib/dxc/lib/x64" "''${PROJECT_SOURCE_DIR}/src/contrib/dxc/bin/x64/dxc-linux")#set (DXC "${lib.getExe' directx-shader-compiler "dxc"}")#' ./lib/rt64/CMakeLists.txt
     ${lib.getExe z64decompress} ${rom} mm.us.rev1.rom_uncompressed.z64
-    ${lib.getExe n64recomp} us.rev1.toml
-    ${lib.getExe' n64recomp "RSPRecomp"} aspMain.us.rev1.toml
-    ${lib.getExe' n64recomp "RSPRecomp"} njpgdspMain.us.rev1.toml
-    ln -s ${lib.getExe n64recomp}
+    ${lib.getExe n64-recomp} us.rev1.toml
+    ${lib.getExe' n64-recomp "RSPRecomp"} aspMain.us.rev1.toml
+    ${lib.getExe' n64-recomp "RSPRecomp"} njpgdspMain.us.rev1.toml
+    ln -s ${lib.getExe n64-recomp}
   '';
 
   hardeningDisable = [
