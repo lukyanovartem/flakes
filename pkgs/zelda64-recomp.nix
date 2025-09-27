@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  SDL2, pkg-config, gtk3, requireFile, gnused, directx-shader-compiler, clangStdenv, makeWrapper, lld
+  SDL2, pkg-config, gtk3, requireFile, directx-shader-compiler, clangStdenv, makeWrapper, lld
 }:
 
 let
@@ -90,15 +90,17 @@ in clangStdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake pkg-config gnused makeWrapper lld
+    cmake pkg-config makeWrapper lld
   ];
 
   buildInputs = [
     SDL2 gtk3
   ];
   preConfigure = ''
-    sed -i 's#set (DXC "LD_LIBRARY_PATH=''${PROJECT_SOURCE_DIR}/lib/rt64/src/contrib/dxc/lib/x64" "''${PROJECT_SOURCE_DIR}/lib/rt64/src/contrib/dxc/bin/x64/dxc-linux")#set (DXC "${lib.getExe' directx-shader-compiler "dxc"}")#' CMakeLists.txt
-    sed -i 's#set (DXC "LD_LIBRARY_PATH=''${PROJECT_SOURCE_DIR}/src/contrib/dxc/lib/x64" "''${PROJECT_SOURCE_DIR}/src/contrib/dxc/bin/x64/dxc-linux")#set (DXC "${lib.getExe' directx-shader-compiler "dxc"}")#' ./lib/rt64/CMakeLists.txt
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "set (DXC \"LD_LIBRARY_PATH=\''${PROJECT_SOURCE_DIR}/lib/rt64/src/contrib/dxc/lib/x64\" \"\''${PROJECT_SOURCE_DIR}/lib/rt64/src/contrib/dxc/bin/x64/dxc-linux\")" "set (DXC \"${lib.getExe' directx-shader-compiler "dxc"}\")"
+    substituteInPlace ./lib/rt64/CMakeLists.txt \
+      --replace-fail "set (DXC \"LD_LIBRARY_PATH=\''${PROJECT_SOURCE_DIR}/src/contrib/dxc/lib/x64\" \"\''${PROJECT_SOURCE_DIR}/src/contrib/dxc/bin/x64/dxc-linux\")" "set (DXC \"${lib.getExe' directx-shader-compiler "dxc"}\")"
     ${lib.getExe z64decompress} ${rom} mm.us.rev1.rom_uncompressed.z64
     ${lib.getExe n64-recomp} us.rev1.toml
     ${lib.getExe' n64-recomp "RSPRecomp"} aspMain.us.rev1.toml
