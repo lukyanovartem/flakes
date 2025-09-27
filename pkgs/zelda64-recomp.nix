@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  SDL2, pkg-config, gtk3, requireFile, directx-shader-compiler, clangStdenv, makeWrapper, lld
+  SDL2, pkg-config, gtk3, requireFile, directx-shader-compiler, clangStdenv, makeWrapper, lld, installShellFiles
 }:
 
 let
@@ -27,8 +27,10 @@ let
       hash = "sha256-PHiOeEB9njJPsl6ScdoDVwJXGqOdIIJCZRbIXSieBIY=";
     };
 
+    nativeBuildInputs = [ installShellFiles ];
+
     installPhase = ''
-      install -Dm755 z64decompress $out/bin/z64decompress
+      installBin z64decompress
     '';
 
     meta = {
@@ -53,12 +55,11 @@ let
     };
 
     nativeBuildInputs = [
-      cmake
+      cmake installShellFiles
     ];
 
     installPhase = ''
-      install -Dm755 ./N64Recomp $out/bin/N64Recomp
-      install -Dm755 ./RSPRecomp $out/bin/RSPRecomp
+      installBin {N64Recomp,RSPRecomp}
     '';
 
     meta = {
@@ -90,7 +91,7 @@ in clangStdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake pkg-config makeWrapper lld
+    cmake pkg-config makeWrapper lld installShellFiles
   ];
 
   buildInputs = [
@@ -99,7 +100,7 @@ in clangStdenv.mkDerivation rec {
   preConfigure = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail "set (DXC \"LD_LIBRARY_PATH=\''${PROJECT_SOURCE_DIR}/lib/rt64/src/contrib/dxc/lib/x64\" \"\''${PROJECT_SOURCE_DIR}/lib/rt64/src/contrib/dxc/bin/x64/dxc-linux\")" "set (DXC \"${lib.getExe' directx-shader-compiler "dxc"}\")"
-    substituteInPlace ./lib/rt64/CMakeLists.txt \
+    substituteInPlace lib/rt64/CMakeLists.txt \
       --replace-fail "set (DXC \"LD_LIBRARY_PATH=\''${PROJECT_SOURCE_DIR}/src/contrib/dxc/lib/x64\" \"\''${PROJECT_SOURCE_DIR}/src/contrib/dxc/bin/x64/dxc-linux\")" "set (DXC \"${lib.getExe' directx-shader-compiler "dxc"}\")"
     ${lib.getExe z64decompress} ${rom} mm.us.rev1.rom_uncompressed.z64
     ${lib.getExe n64-recomp} us.rev1.toml
@@ -113,10 +114,10 @@ in clangStdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    install -Dm755 ./Zelda64Recompiled $out/Zelda64Recompiled
+    installBin Zelda64Recompiled
     install -Dm644 $src/recompcontrollerdb.txt $out/recompcontrollerdb.txt
     cp -r $src/assets $out
-    makeWrapper $out/Zelda64Recompiled $out/bin/Zelda64Recompiled \
+    wrapProgram $out/bin/Zelda64Recompiled \
       --run '${zelda64-recomp-run}' \
       --chdir "$out"
   '';

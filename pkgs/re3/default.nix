@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchgit, premake5, glfw, openal, mpg123, libsndfile }:
+{ lib, stdenv, fetchurl, fetchgit, premake5, glfw, openal, mpg123, libsndfile, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "re3";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ glfw openal mpg123 libsndfile ];
-  nativeBuildInputs = [ premake5 ];
+  nativeBuildInputs = [ premake5 installShellFiles ];
 
   preConfigure = ''
     patchShebangs printHash.sh
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    install -Dm755 ../bin/linux-amd64-librw_gl3_glfw-oal/Release/re3 $out/bin/re3
+    installBin ../bin/linux-amd64-librw_gl3_glfw-oal/Release/re3
     mkdir -p $out/share/games/re3
     cp -r ../gamefiles $out/share/games/re3
   '';

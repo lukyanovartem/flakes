@@ -1,4 +1,4 @@
-{ re3, lib, fetchFromGitHub }:
+{ re3, lib, fetchFromGitHub, installShellFiles }:
 
 re3.overrideAttrs (oldAttrs: rec {
   pname = "revc";
@@ -14,7 +14,7 @@ re3.overrideAttrs (oldAttrs: rec {
   };
 
   installPhase = ''
-    install -Dm755 ../bin/linux-amd64-librw_gl3_glfw-oal/Release/reVC $out/bin/revc
+    InstallBin ../bin/linux-amd64-librw_gl3_glfw-oal/Release/reVC
     mkdir -p $out/share/games/revc
     cp -r ../gamefiles $out/share/games/revc
   '';
