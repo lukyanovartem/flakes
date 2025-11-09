@@ -3,25 +3,19 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  wrapQtAppsHook, qtbase, shaderc, makeDesktopItem, fetchpatch, git
+  git, fetchpatch,
+  vulkan-loader, vulkan-headers, shaderc, glslang,
 }:
 
-let
-  sd = makeDesktopItem rec {
-    name = "sd";
-    exec = name;
-    desktopName = "Stable Diffusion";
-    categories = [ "Graphics" ];
-  };
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "stable-diffusion-cpp";
-  version = "10c6501";
+  version = "10feacf";
 
   src = fetchFromGitHub {
-    owner = "piallai";
+    owner = "leejet";
     repo = "stable-diffusion.cpp";
-    rev = "CLI-GUI-${version}";
-    hash = "sha256-lNO/8SLpH8sQe0yeZeEyJ6gc1WCEI0RxXVNW6LSHjqQ=";
+    rev = "master-${version}";
+    hash = "sha256-LrWS16rddPqJJc+73/6mNqWdweAd0ZboxI5m1rvIxtA=";
     fetchSubmodules = true;
   };
 
@@ -33,28 +27,21 @@ in stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    cmake
-    wrapQtAppsHook shaderc git
+    cmake git vulkan-headers shaderc glslang
   ];
 
   buildInputs = [
-    qtbase
+    vulkan-loader
   ];
 
   cmakeFlags = [
-    "-DSD_EXAMPLES_GLOVE_GUI=ON"
     "-DSD_VULKAN=ON"
   ];
 
-  postInstall = ''
-    mkdir -p $out/share/applications
-    ln -s ${sd}/share/applications/* $out/share/applications
-  '';
-
   meta = {
-    description = "Stable Diffusion in pure C/C++";
-    homepage = "https://github.com/piallai/stable-diffusion.cpp";
-    license = with lib.licenses; [ gpl3Only mit ];
+    description = "Stable Diffusion and Flux in pure C/C";
+    homepage = "https://github.com/leejet/stable-diffusion.cpp";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ];
     mainProgram = "sd";
     platforms = lib.platforms.all;
