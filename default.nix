@@ -6,12 +6,10 @@ rec {
   lib = import ./lib { inherit pkgs; };
 
   k380-function-keys-conf = callPackage ./pkgs/k380-function-keys-conf.nix { };
-  knobkraft-orm = callPackage ./pkgs/knobkraft-orm.nix { };
   re3 = callPackage ./pkgs/re3.nix {};
   wireless-regdb = callPackage ./pkgs/wireless-regdb {};
   cockpit-machines = callPackage ./pkgs/cockpit/machines.nix {};
   cockpit-client = callPackage ./pkgs/cockpit/client.nix {};
-  libvirt-dbus = callPackage ./pkgs/libvirt-dbus.nix {};
   gitupdate = callPackage ./pkgs/gitupdate.nix {};
   gtk3-nocsd = callPackage ./pkgs/gtk3-nocsd.nix {};
   aml-upgrade-package-extract = callPackage ./pkgs/aml-upgrade-package-extract.nix {};
@@ -26,6 +24,6 @@ rec {
   sftpgo-plugin-auth = callPackage ./pkgs/sftpgo-plugin-auth.nix {};
   aulaf87-rgb = callPackage ./pkgs/aulaf87-rgb.nix {};
   stable-diffusion-cpp = callPackage ./pkgs/stable-diffusion-cpp.nix {};
-  sd-cpp-webui = callPackage ./pkgs/sd-cpp-webui { inherit stable-diffusion-cpp; };
+  sd-cpp-webui = callPackage ./pkgs/sd-cpp-webui.nix { inherit stable-diffusion-cpp; };
   emulationstation-de = callPackage ./pkgs/emulationstation-de {};
 }

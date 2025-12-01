@@ -2,18 +2,18 @@
 , makeWrapper, ffmpeg }:
 
 let
-  version = "2025-05-23";
+  version = "2025.11.29";
   src = fetchFromGitHub {
     owner = "alexta69";
     repo = "metube";
-    rev = "b07db0c9e321acc600183c8cd0a8721001a9428a";
-    hash = "sha256-BsvyeiFx8Ov3/Pt7D6wSnDLoCh3plXYCcAJ7r9deq7k=";
+    rev = "${version}";
+    hash = "sha256-iFVQHuWuGq261YGoEj5BjgVPzwGcveJGG8NohHS9D8I=";
   };
   metube_ui = buildNpmPackage rec {
     pname = "metube-ui";
     inherit version src;
     sourceRoot = "source/ui";
-    npmDepsHash = "sha256-LJer26oDi30+wDmN8GFwQCw88Nu1CfWi4X8LJaAyeGo=";
+    npmDepsHash = "sha256-rnZqWcpklOPFlEVnj5w73Uh17hRBeWKP+P1jn8aQC0w=";
   };
 in stdenv.mkDerivation rec {
   pname = "metube";
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = with python3Packages; [ wrapPython makeWrapper ];
 
-  pythonPath = with python3Packages; [ pylint aiohttp python-socketio yt-dlp ];
+  pythonPath = with python3Packages; [ pylint aiohttp python-socketio yt-dlp watchfiles ];
 
   postFixup = ''
     mkdir -p $out/app $out/ui $out/bin
@@ -33,7 +33,8 @@ in stdenv.mkDerivation rec {
     cp -r ${metube_ui}/lib/node_modules/metube/dist $out/ui
     wrapPythonProgramsIn $out/app "$out $pythonPath"
     makeWrapper $out/app/main.py $out/bin/metube \
-      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]} \
+      --set METUBE_VERSION ${version}
   '';
 
   meta = {

@@ -9,22 +9,15 @@
 
 stdenv.mkDerivation rec {
   pname = "stable-diffusion-cpp";
-  version = "10feacf";
+  version = "383-20eb674";
 
   src = fetchFromGitHub {
     owner = "leejet";
     repo = "stable-diffusion.cpp";
     rev = "master-${version}";
-    hash = "sha256-LrWS16rddPqJJc+73/6mNqWdweAd0ZboxI5m1rvIxtA=";
+    hash = "sha256-9XKoxbBpYcZRL7N7/fpqtJ4kMJlY5NywbiYnfv5W1yk=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/leejet/stable-diffusion.cpp/pull/484.patch";
-      hash = "sha256-VapHVytOgJEMKUG9EECZChpcD3CrauYcAnl21PNrxo4=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake git vulkan-headers shaderc glslang
