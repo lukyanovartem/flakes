@@ -16,7 +16,7 @@ in {
     hardware.graphics = {
       enable = mkDefault true;
       extraPackages = with pkgs; [
-        intel-media-driver intel-vaapi-driver vaapiVdpau intel-compute-runtime intel-media-sdk
+        intel-media-driver intel-vaapi-driver libva-vdpau-driver intel-compute-runtime #intel-media-sdk
       ];
     };
 

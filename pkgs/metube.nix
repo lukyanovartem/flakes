@@ -1,4 +1,4 @@
-{ stdenv, lib, buildNpmPackage, fetchFromGitHub, python311Packages
+{ stdenv, lib, buildNpmPackage, fetchFromGitHub, python3Packages
 , makeWrapper, ffmpeg }:
 
 let
@@ -19,9 +19,9 @@ in stdenv.mkDerivation rec {
   pname = "metube";
   inherit version src;
 
-  nativeBuildInputs = with python311Packages; [ wrapPython makeWrapper ];
+  nativeBuildInputs = with python3Packages; [ wrapPython makeWrapper ];
 
-  pythonPath = with python311Packages; [ pylint aiohttp python-socketio yt-dlp ];
+  pythonPath = with python3Packages; [ pylint aiohttp python-socketio yt-dlp ];
 
   postFixup = ''
     mkdir -p $out/app $out/ui $out/bin
