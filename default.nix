@@ -27,4 +27,5 @@ rec {
   aulaf87-rgb = callPackage ./pkgs/aulaf87-rgb.nix {};
   stable-diffusion-cpp = callPackage ./pkgs/stable-diffusion-cpp.nix {};
   sd-cpp-webui = callPackage ./pkgs/sd-cpp-webui { inherit stable-diffusion-cpp; };
+  emulationstation-de = callPackage ./pkgs/emulationstation-de {};
 }

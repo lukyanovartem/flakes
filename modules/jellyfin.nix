@@ -10,13 +10,10 @@ in {
 
   config = mkIf cfg.enable {
     services.jellyfin.enable = true;
-    nixpkgs.config.packageOverrides = pkgs: {
-      vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-    };
     hardware.graphics = {
-      enable = mkDefault true;
+      enable = true;
       extraPackages = with pkgs; [
-        intel-media-driver intel-vaapi-driver libva-vdpau-driver intel-compute-runtime #intel-media-sdk
+        intel-media-driver
       ];
     };
 
