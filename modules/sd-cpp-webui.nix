@@ -22,6 +22,14 @@ in {
       type = types.package;
       default = pkgs.lukyanovartem.sd-cpp-webui;
     };
+    port = mkOption {
+      type = types.int;
+      default = 7860;
+    };
+    host = mkOption {
+      type = types.str;
+      default = "0.0.0.0";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -40,12 +48,14 @@ in {
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${getExe cfg.package} --listen";
+        ExecStart = "${getExe cfg.package}";
         Restart = "on-failure";
         TimeoutSec = 300;
         StartLimitBurst = 10;
         WorkingDirectory = cfg.dataDir;
       };
+      environment.GRADIO_SERVER_PORT = toString cfg.port;
+      environment.GRADIO_SERVER_NAME = cfg.host;
       wantedBy = [ "multi-user.target" ];
     };
   };
