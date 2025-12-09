@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
     "--with-systemdunitdir=$(out)/lib/systemd/system"
   ];
   nativeBuildInputs = [
-    pkg-config python3 wrapGAppsHook gobject-introspection getent
+    pkg-config python3 wrapGAppsHook getent
   ] ++ (with python3Packages; [
     wrapPython pip
   ]);
   buildInputs = [
-    glib systemd json-glib gnutls krb5 pam libxcrypt webkitgtk
+    glib systemd json-glib gnutls krb5 pam libxcrypt webkitgtk gobject-introspection
   ];
   postPatch = ''
     substituteInPlace src/client/cockpit-client \
