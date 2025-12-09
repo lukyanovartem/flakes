@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     mv tools/build/lib/rhvoice_tools $out/${python3Packages.python.sitePackages}
     makeWrapper ${lib.getExe rhvoice} $out/bin/RHVoice-test \
       --set RHVOICE_CONFIG_PATH $out/share/RHVoice
-    installBin ${./text_prepare}
+    installBin ${./text-prepare}
   '';
 
   pythonPath = with python3Packages; [ pymorphy3 pygobject3 ];
