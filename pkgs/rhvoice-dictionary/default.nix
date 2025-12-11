@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  python3Packages, wrapGAppsHook3, gobject-introspection, rhvoice, installShellFiles
+  python3Packages, rhvoice, installShellFiles
 }:
 
 stdenv.mkDerivation rec {
@@ -16,14 +16,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-QKG+6chCzwRJc2fvT41oW3hihW0WJZ5wIlDYwuA9R34=";
   };
 
-  nativeBuildInputs = with python3Packages; [ python wrapPython installShellFiles wrapGAppsHook3 ];
-
-  buildInputs = [ gobject-introspection ];
+  nativeBuildInputs = with python3Packages; [ python wrapPython installShellFiles ];
 
   buildPhase = ''
     cd tools
     substituteInPlace build.py \
       --replace-fail "getsitepackages()[0]" "\"lib\""
+    substituteInPlace __init__.py \
+      --replace-fail "from .rhvoice_say.rhvoice_say import rhvoice_say, say_clipboard" "" \
+      --replace-fail "from .rhvoice_config.rhvoice_conf_gui import main as rhvoice_config" ""
     patchShebangs .
     ./build.py
     cd ..
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
     installBin ${./text-prepare}
   '';
 
-  pythonPath = with python3Packages; [ pymorphy3 pygobject3 ];
+  pythonPath = with python3Packages; [ pymorphy3 ];
   postFixup = ''
     wrapPythonProgramsIn $out/bin "$out $pythonPath"
   '';
