@@ -27,4 +27,5 @@ rec {
   sd-cpp-webui = callPackage ./pkgs/sd-cpp-webui.nix { inherit stable-diffusion-cpp; };
   emulationstation-de = callPackage ./pkgs/emulationstation-de {};
   rhvoice-dictionary = callPackage ./pkgs/rhvoice-dictionary {};
+  ebook2audiobook = callPackage ./pkgs/ebook2audiobook {};
 }
