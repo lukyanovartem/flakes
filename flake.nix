@@ -1,6 +1,5 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs?rev=d542db745310b6929708d9abea513f3ff19b1341";
     nur = {
       url = "github:nix-community/NUR?rev=ad500bcca20e1749278e396b70dc682f8807ac21";
       inputs.nixpkgs.follows = "nixpkgs";
