@@ -17,7 +17,6 @@ in {
       ];
     };
 
-    services.jellyseerr.enable = true;
     services.sonarr.enable = true;
     services.sonarr.group = config.services.transmission.group;
     services.radarr.enable = true;
