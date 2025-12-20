@@ -1,7 +1,0 @@
-#!/usr/bin/env python3
-
-from rhvoice_tools import text_prepare
-from sys import stdin
-
-for line in sys.stdin:
-    print(text_prepare(line))
