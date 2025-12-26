@@ -33,16 +33,17 @@ let
             , host ? "127.0.0.1"
             , port ? 80
             , websockets ? false
+            , nginxAttrs ? {}
             , ...
           }:
     {
-      "${name}.${cfg.networking.hostName}" = {
+      "${name}.${cfg.networking.hostName}" = recursiveUpdate ({
         serverAliases = [ "${name}.${cfg.networking.fqdn}" ];
         locations."/" = {
           proxyPass = "${protocol}://${host}:${toString port}";
           proxyWebsockets = websockets;
         };
-      } // cfg.attrs;
+      } // cfg.attrs) nginxAttrs;
     };
   cond = x: isAttrs x && hasAttr "name" x;
   map' = cond: f: x:
