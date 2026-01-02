@@ -1,0 +1,21 @@
+--- functions.py.orig	2026-01-02 11:18:24.979930416 +0300
++++ ./lib/functions.py	2026-01-02 11:21:34.986134810 +0300
+@@ -1353,7 +1353,10 @@ def clock2words(text:str, lang:str, lang
+             phrase = lc["past"].format(hour=n2w(h), minute=n2w(mnt)) if mnt != 0 else lc["oclock"].format(hour=n2w(h))
+         else:
+             minute_to_hour = 60 - mnt
+-            phrase = lc["to"].format(next_hour=n2w(next_hour), minute=n2w(minute_to_hour))
++            try:
++                 phrase = lc["to"].format(next_hour=n2w(next_hour), minute=n2w(minute_to_hour))
++            except Exception:
++                 return m.group(0)
+         # Append seconds if present
+         if sec is not None and sec > 0:
+             second_phrase = lc["second"].format(second=n2w(sec))
+@@ -2572,4 +2575,4 @@ def get_all_ip_addresses()->list:
+         for address in addresses:
+             if address.family in [socket.AF_INET, socket.AF_INET6]:
+                 ip_addresses.append(address.address) 
+-    return ip_addresses
+\ В конце файла нет новой строки
++    return ip_addresses
