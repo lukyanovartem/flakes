@@ -92,13 +92,6 @@ in {
       };
     } // mergeAttrsList (flatten' cond nginx (filter (x: x.nginx or true) cfg.allservices));
     services.homepage-dashboard.enable = true;
-    services.homepage-dashboard.settings = {
-      target = "_self";
-      hideErrors = true;
-      statusStyle = "dot";
-      language = "ru";
-      useEqualHeights = true;
-    };
     services.homepage-dashboard.services = map' cond page cfg.allservices;
   };
 }
