@@ -1,0 +1,41 @@
+diff --git a/lib/functions.py b/lib/functions.py
+index 23929bd6..4e62a8b9 100644
+--- a/lib/functions.py
++++ b/lib/functions.py
+@@ -1216,7 +1216,7 @@ def set_formatted_number(text:str, lang:str, lang_iso1:str, is_num2words_compat:
+     # handle optional range with dash/en dash/em dash between numbers, and allow trailing punctuation
+     number_re = re.compile(
+         r'(?<!\w)'
+-        r'(\d{1,18}(?:,\s*\d{1,18})*(?:\.\d{1,12})?)'      # first number
++        r'(\d{1,18}(?:,\s*\d{1,18})*(?:\d{1,12})?)'        # ignore dot separated fractional numbers
+         r'(?:\s*([-–—])\s*'                                # dash type
+         r'(\d{1,18}(?:,\s*\d{1,18})*(?:\.\d{1,12})?))?'    # optional second number
+         r'([^\w\s]*)',                                     # optional trailing punctuation
+@@ -1295,7 +1295,7 @@ def year2words(year_str:str, lang:str, lang_iso1:str, is_num2words_compat:bool)-
+         return False
+ 
+ def clock2words(text:str, lang:str, lang_iso1:str, tts_engine:str, is_num2words_compat:bool)->str:
+-    time_rx = re.compile(r'(\d{1,2})[:.](\d{1,2})(?:[:.](\d{1,2}))?')
++    time_rx = re.compile(r'(\d{1,2})[:](\d{1,2})(?:[:](\d{1,2}))?') # ignore dot separated time
+     lc = language_clock.get(lang) if 'language_clock' in globals() else None
+     _n2w_cache = {}
+ 
+@@ -1353,7 +1353,10 @@ def clock2words(text:str, lang:str, lang_iso1:str, tts_engine:str, is_num2words_
+             phrase = lc["past"].format(hour=n2w(h), minute=n2w(mnt)) if mnt != 0 else lc["oclock"].format(hour=n2w(h))
+         else:
+             minute_to_hour = 60 - mnt
+-            phrase = lc["to"].format(next_hour=n2w(next_hour), minute=n2w(minute_to_hour))
++            try:
++                phrase = lc["to"].format(next_hour=n2w(next_hour), minute=n2w(minute_to_hour))
++            except Exception:
++                return m.group(0)
+         # Append seconds if present
+         if sec is not None and sec > 0:
+             second_phrase = lc["second"].format(second=n2w(sec))
+@@ -2572,4 +2575,4 @@ def get_all_ip_addresses()->list:
+         for address in addresses:
+             if address.family in [socket.AF_INET, socket.AF_INET6]:
+                 ip_addresses.append(address.address) 
+-    return ip_addresses
+\ No newline at end of file
++    return ip_addresses

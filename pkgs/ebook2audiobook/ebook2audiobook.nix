@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = with python3Packages; [ python wrapPython ];
 
-  patches = [ ./minute_to_hour.patch ];
+  patches = [ ./functions.patch ];
 
   buildPhase = ''
     sed -i '1 i\#!/usr/bin/env python' app.py
