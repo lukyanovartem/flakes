@@ -7,7 +7,6 @@ rec {
   vscodium = ./vscodium.nix;
   udisks = ./udisks.nix;
   theme = ./theme.nix;
-  jellyfin = ./jellyfin.nix;
   catppuccin = ./catppuccin.nix;
   zsh = ./zsh.nix;
   dashboard = ./dashboard.nix;
