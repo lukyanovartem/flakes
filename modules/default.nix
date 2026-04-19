@@ -13,4 +13,5 @@ rec {
   aulaf87-rgb = ./aulaf87-rgb.nix;
   sd-cpp-webui = ./sd-cpp-webui.nix;
   nixos-passthru-cache = ./nixos-passthru-cache.nix;
+  dms = ./dms.nix;
 }
