@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/marcoslor/Aula-F87-Controller";
     license = lib.licenses.free;
     maintainers = with lib.maintainers; [ ];
-    mainProgram = "aula-f87-controller";
+    mainProgram = "aula_f87.py";
     platforms = lib.platforms.all;
   };
 }

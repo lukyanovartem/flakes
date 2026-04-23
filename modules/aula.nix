@@ -8,7 +8,7 @@ let
   leds = concatStringsSep " " (mapAttrsToList (name: value: "${name}:${value}") cfg.leds);
 in {
   options.services.aula = {
-    enable = mkEnableOption "Aula F87";
+    enable = mkEnableOption "Aula F87 support";
     keys = mkOption {
       type = format.type;
       default = {};
@@ -33,7 +33,7 @@ in {
       reloadIfChanged = true;
       serviceConfig = {
         RemainAfterExit = true;
-        ExecReload = "${pkgs.lukyanovartem.aula-keybind}/bin/aula-keybind bind import ${keys}";
+        ExecReload = "${getExe pkgs.lukyanovartem.aula-keybind} bind import ${keys}";
       };
       script = ''
         exit 0
@@ -45,7 +45,7 @@ in {
       reloadIfChanged = true;
       serviceConfig = {
         RemainAfterExit = true;
-        ExecReload = "${pkgs.lukyanovartem.aula-f87-controller}/bin/aula_f87.py perkey ${leds}";
+        ExecReload = "${getExe pkgs.lukyanovartem.aula-f87-controller} perkey ${leds}";
       };
       script = ''
         exit 0
