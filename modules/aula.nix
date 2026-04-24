@@ -17,6 +17,7 @@ in {
       type = types.attrs;
       default = {};
     };
+    applyOnChange = mkEnableOption "applying changes to firmware on config changes";
   };
 
   config = mkIf cfg.enable {
@@ -30,7 +31,7 @@ in {
 
     systemd.services.aula-keybind = {
       wantedBy = [ "multi-user.target" ];
-      reloadIfChanged = true;
+      reloadIfChanged = cfg.applyOnChange;
       serviceConfig = {
         RemainAfterExit = true;
         ExecReload = "${getExe pkgs.lukyanovartem.aula-keybind} bind import ${keys}";
@@ -42,7 +43,7 @@ in {
 
     systemd.services.aula-f87-controller = {
       wantedBy = [ "multi-user.target" ];
-      reloadIfChanged = true;
+      reloadIfChanged = cfg.applyOnChange;
       serviceConfig = {
         RemainAfterExit = true;
         ExecReload = "${getExe pkgs.lukyanovartem.aula-f87-controller} perkey ${leds}";
