@@ -12,6 +12,5 @@ rec {
   dashboard = ./dashboard.nix;
   sd-cpp-webui = ./sd-cpp-webui.nix;
   nixos-passthru-cache = ./nixos-passthru-cache.nix;
-  dms = ./dms.nix;
   aula = ./aula.nix;
 }
