@@ -5,7 +5,10 @@ let
   cfg = config.services.aula;
   format = pkgs.formats.json { };
   keys = pkgs.writeText "keys.json" (builtins.toJSON cfg.keys);
-  leds = concatStringsSep " " (mapAttrsToList (name: value: "${name}:${value}") cfg.leds);
+  leds = pkgs.writeShellScript "leds" ''
+    args="${concatStringsSep " " (mapAttrsToList (name: value: "${name}:${value}") cfg.leds)}"
+    ${getExe pkgs.lukyanovartem.aula-f87-controller} perkey $args
+  '';
 in {
   options.services.aula = {
     enable = mkEnableOption "Aula F87 support";
@@ -46,7 +49,7 @@ in {
       reloadIfChanged = cfg.applyOnChange;
       serviceConfig = {
         RemainAfterExit = true;
-        ExecReload = "${getExe pkgs.lukyanovartem.aula-f87-controller} perkey ${leds}";
+        ExecReload = leds;
       };
       script = ''
         exit 0
