@@ -2,7 +2,7 @@
 
 with lib;
 let
-  cfg = config.services.aula;
+  cfg = config.hardware.aula;
   format = pkgs.formats.json { };
   keys = pkgs.writeText "keys.json" (builtins.toJSON cfg.keys);
   leds = pkgs.writeShellScript "leds" ''
@@ -10,7 +10,7 @@ let
     ${getExe pkgs.lukyanovartem.aula-f87-controller} perkey $args
   '';
 in {
-  options.services.aula = {
+  options.hardware.aula = {
     enable = mkEnableOption "Aula F87 support";
     keys = mkOption {
       type = format.type;
