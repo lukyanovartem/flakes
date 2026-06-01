@@ -245,16 +245,12 @@ libjpeg = stdenv.mkDerivation (finalAttrs: {
 });
 in stdenv.mkDerivation (finalAttrs: {
   pname = "emulationstation-de";
-  version = "3.4.0";
+  version = "3.4.1";
 
   src = fetchzip {
     url = "https://gitlab.com/es-de/emulationstation-de/-/archive/v${finalAttrs.version}/emulationstation-de-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-poegMKtPtUbdUbAwVj6O+rh7bxou+Wc+IDS3TBHh2LU=";
+    hash = "sha256-MVmJIdxwEG3wgvwbhuIEYCxKaYss/3hq9xszGLjZ1Xw=";
   };
-
-  patches = [
-    ./001-add-nixpkgs-retroarch-cores.patch
-  ];
 
   postPatch = ''
     # ldd-based detection fails for cross builds
