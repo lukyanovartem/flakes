@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "marcoslor";
     repo = "Aula-F87-Controller";
-    rev = "04c1388ffae69828dba12d750d545c69770b8fc0";
-    hash = "sha256-ZzmQxLoiiRRIvDT62TmxSjfX7pZ3RIwZMbrg+3F7AMI=";
+    rev = "de3cbef7d6149c31877ac96bd60d8c71581d301f";
+    hash = "sha256-9RAqmcvah1DLEUmOI+xBp7OD+FaIVvRmK4oxmjefmXI=";
     sparseCheckout = [
       "python-cli"
     ];
