@@ -2,26 +2,21 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  python3Packages, stable-diffusion-cpp, pciutils
+  python3Packages, stable-diffusion-cpp-vulkan, pciutils, which
 }:
 
 stdenv.mkDerivation rec {
   pname = "sd-cpp-webui";
-  version = "unstable-2025-11-20";
+  version = "unstable-2026-05-23";
 
   src = fetchFromGitHub {
     owner = "daniandtheweb";
     repo = "sd.cpp-webui";
-    rev = "67cbe425839f36999808acbd2342bcc9b2ac017d";
-    hash = "sha256-smXfTR26BDYsnyQKuqJ0/ONUMlEWOvszlmTxFnnyBnA=";
+    rev = "fac4149aa9c59619bcca9514486b80f6db833350";
+    hash = "sha256-azXNcPoNwfha1h3hw00lu6K0REu98cCtQSTMXTl6uaA=";
   };
 
   nativeBuildInputs = with python3Packages; [ wrapPython ];
-
-  buildPhase = ''
-    substituteInPlace modules/utils/sd_interface.py \
-      --replace-fail "./sd" "${lib.getExe stable-diffusion-cpp}"
-  '';
 
   installPhase = ''
     mkdir -p $out/${python3Packages.python.sitePackages}
@@ -29,7 +24,7 @@ stdenv.mkDerivation rec {
     install -Dm755 sdcpp_webui.py $out/bin/sdcpp_webui
   '';
 
-  pythonPath = with python3Packages; [ gradio pciutils ];
+  pythonPath = with python3Packages; [ gradio pciutils which stable-diffusion-cpp-vulkan ];
   postFixup = ''
     wrapPythonProgramsIn $out/bin "$out $pythonPath"
   '';
