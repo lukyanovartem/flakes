@@ -12,15 +12,15 @@
 
 python3Packages.buildPythonApplication {
   pname = "nirimod";
-  version = "unstable-2026-05-13";
+  version = "unstable-2026-05-30";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "srinivasr";
     repo = "nirimod";
-    rev = "3d68ce73c414661048990dfc2535bf637c84e626";
-    hash = "sha256-87b5w7yfcbLdY056vhEYgkY6kh/rhDw3eDKAn3ZbP5c=";
+    rev = "f86518f7b2cd13b08591122bd49e770100808313";
+    hash = "sha256-k9LEaef54u+P2yJXLQP+GtRSXQRSXKEBmszkze7tOfg=";
   };
 
   nativeBuildInputs = [
