@@ -10,4 +10,5 @@ rec {
   sd-cpp-webui = ./sd-cpp-webui.nix;
   nixos-passthru-cache = ./nixos-passthru-cache.nix;
   aula = ./aula.nix;
+  ums = ./ums.nix;
 }
