@@ -9,5 +9,4 @@ rec {
   dashboard = ./dashboard.nix;
   sd-cpp-webui = ./sd-cpp-webui.nix;
   aula = ./aula.nix;
-  ums = ./ums.nix;
 }
