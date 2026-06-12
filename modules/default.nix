@@ -8,7 +8,6 @@ rec {
   zsh = ./zsh.nix;
   dashboard = ./dashboard.nix;
   sd-cpp-webui = ./sd-cpp-webui.nix;
-  nixos-passthru-cache = ./nixos-passthru-cache.nix;
   aula = ./aula.nix;
   ums = ./ums.nix;
 }
