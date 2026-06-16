@@ -22,6 +22,7 @@ in
   };
 
   config = mkIf cfg.enable {
+    services.nix-serve.enable = true;
     services.nginx = {
       enable = true;
       virtualHosts."nix-serve" = {
