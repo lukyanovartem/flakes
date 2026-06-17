@@ -12,7 +12,6 @@ in {
 
   config = mkIf cfg.enable {
     nixpkgs.config.pulseaudio = true;
-    programs.dconf.enable = mkDefault true;
     services.pipewire.enable = true;
     services.pipewire.pulse.enable = true;
     services.pipewire.jack.enable = true;

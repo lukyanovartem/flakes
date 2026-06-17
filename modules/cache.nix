@@ -19,6 +19,10 @@ in
       type = types.int;
       default = 5001;
     };
+    timeout = mkOption {
+      type = types.str;
+      default = "1s";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -39,7 +43,7 @@ in
               value = {
                 proxyPass = "http://${x}:${toString config.services.nix-serve.port}/";
                 extraConfig = ''
-                  proxy_connect_timeout 1s;
+                  proxy_connect_timeout ${cfg.timeout};
                   error_page 504 =404 /;
                 '';
               };
