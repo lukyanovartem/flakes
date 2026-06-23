@@ -44,7 +44,7 @@ in
                 proxyPass = "http://${x}:${toString config.services.nix-serve.port}/";
                 extraConfig = ''
                   proxy_connect_timeout ${cfg.timeout};
-                  error_page 504 =404 /;
+                  error_page 504 502 =404 /;
                 '';
               };
             }) cfg.hosts
