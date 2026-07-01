@@ -3,10 +3,17 @@
   stdenv,
   fetchurl,
   nix-update-script,
-  zip, snapraid
+  zip, snapraid, smartmontools
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  snapraid' = snapraid.overrideAttrs (oldAttrs: rec {
+    preConfigure = ''
+      substituteInPlace cmdline/unix.c \
+        --replace "/usr/sbin/smartctl" "${lib.getExe smartmontools}"
+    '';
+  });
+in stdenv.mkDerivation (finalAttrs: {
   pname = "snapraid-daemon";
   version = "1.12";
   __structuredAttrs = true;
@@ -23,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace Makefile.in \
       --replace-fail "\$(sysconfdir)/snapraidd.conf" "$out/etc/snapraidd.conf"
     substituteInPlace daemon/unix.c \
-      --replace-fail "/usr/bin/snapraid" "${lib.getExe snapraid}"
+      --replace-fail "/usr/bin/snapraid" "${lib.getExe snapraid'}"
   '';
 
   configureFlags = [
