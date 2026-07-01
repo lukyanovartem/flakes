@@ -10,4 +10,5 @@ rec {
   sd-cpp-webui = ./sd-cpp-webui.nix;
   aula = ./aula.nix;
   cache = ./cache.nix;
+  snapraid-daemon = ./snapraid-daemon.nix;
 }
