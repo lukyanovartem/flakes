@@ -27,14 +27,13 @@ in stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ zip ];
 
   preConfigure = ''
-    substituteInPlace Makefile.in \
-      --replace-fail "\$(sysconfdir)/snapraidd.conf" "$out/etc/snapraidd.conf"
     substituteInPlace daemon/unix.c \
       --replace-fail "/usr/bin/snapraid" "${lib.getExe snapraid'}"
+    substituteInPlace snapraidd.service.in \
+      --replace-fail "ExecStart=@bindir@/snapraidd" ""
   '';
 
   configureFlags = [
-    "--sysconfdir=/etc"
     "--with-init-type=systemd"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
   ];
@@ -51,7 +50,7 @@ in stdenv.mkDerivation (finalAttrs: {
       mit
     ];
     maintainers = with lib.maintainers; [ ];
-    mainProgram = "snapraid-daemon";
+    mainProgram = "snapraidd";
     platforms = lib.platforms.all;
   };
 })
