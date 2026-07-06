@@ -7,7 +7,6 @@ rec {
   vscodium = ./vscodium.nix;
   zsh = ./zsh.nix;
   dashboard = ./dashboard.nix;
-  sd-cpp-webui = ./sd-cpp-webui.nix;
   aula = ./aula.nix;
   cache = ./cache.nix;
   snapraid-daemon = ./snapraid-daemon.nix;
