@@ -12,5 +12,4 @@ rec {
   aula-f87-controller = callPackage ./pkgs/aula/aula-f87-controller.nix {};
   nirimod = callPackage ./pkgs/nirimod.nix {};
   snapraid-daemon = callPackage ./pkgs/snapraid-daemon.nix {};
-  policyfs = callPackage ./pkgs/policyfs.nix {};
 }
