@@ -10,4 +10,5 @@ rec {
   aula = ./aula.nix;
   cache = ./cache.nix;
   snapraid-daemon = ./snapraid-daemon.nix;
+  policyfs = ./policyfs.nix;
 }
