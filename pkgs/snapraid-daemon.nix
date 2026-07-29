@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   nix-update-script,
-  zip, snapraid, smartmontools
+  zip, snapraid, smartmontools, util-linux
 }:
 
 let
@@ -30,7 +30,8 @@ in stdenv.mkDerivation (finalAttrs: {
     substituteInPlace daemon/unix.c \
       --replace-fail "/usr/bin/snapraid" "${lib.getExe snapraid'}"
     substituteInPlace snapraidd.service.in \
-      --replace-fail "ExecStart=@bindir@/snapraidd" ""
+      --replace-fail "ExecStart=@bindir@/snapraidd" "" \
+      --replace-fail "/bin/kill" "${util-linux}/bin/kill"
   '';
 
   configureFlags = [
