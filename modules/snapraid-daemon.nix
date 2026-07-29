@@ -32,7 +32,7 @@ in {
   config = mkIf cfg.enable {
     systemd.packages = [ snapraid-daemon ];
     systemd.services.snapraidd = {
-      serviceConfig.ExecStart = "${getExe snapraid-daemon} -c ${configFile}";
+      serviceConfig.ExecStart = [ "" "${getExe snapraid-daemon} -c ${configFile}" ];
       wantedBy = [ "multi-user.target" ];
     };
 
