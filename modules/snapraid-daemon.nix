@@ -4,11 +4,13 @@ with lib;
 let
   cfg = config.services.snapraid-daemon;
   snapraid-daemon = pkgs.lukyanovartem.snapraid-daemon;
-  configFile = pkgs.writeText "snapraidd.conf" ''
-    ${builtins.readFile "${snapraid-daemon}/etc/snapraidd.conf"}
-    ${optionalString (cfg.settings != null) settingsFile}
-  '';
-  settingsFile = (concatStringsSep "\n" (mapAttrsToList toSettingsFile cfg.settings));
+
+  originalFile = readFile "${snapraid-daemon}/etc/snapraidd.conf";
+  originalArray = strings.splitString "\n" originalFile;
+  hasKey = x: filter (y: hasPrefix y x) (builtins.attrNames cfg.settings);
+  commentedArray = concatStringsSep "\n" (map (x: if hasKey x != [] then "#" + x else x) originalArray);
+  commentedFile = if cfg.settings == null then originalFile else commentedArray;
+
   toSettingsFile = key: value:
     let
       value' =
@@ -16,6 +18,12 @@ let
         else toString value;
     in
       "${key} = ${value'}";
+  settingsFile = concatStringsSep "\n" (mapAttrsToList toSettingsFile cfg.settings);
+
+  configFile = pkgs.writeText "snapraidd.conf" ''
+    ${commentedFile}
+    ${optionalString (cfg.settings != null) settingsFile}
+  '';
 in {
   options.services.snapraid-daemon = {
     enable = mkEnableOption "SnapRAID Daemon.";
