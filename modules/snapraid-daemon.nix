@@ -7,7 +7,7 @@ let
 
   originalFile = readFile "${snapraid-daemon}/etc/snapraidd.conf";
   originalArray = strings.splitString "\n" originalFile;
-  hasKey = x: filter (y: hasPrefix y x) (builtins.attrNames cfg.settings);
+  hasKey = x: filter (y: hasPrefix (y + " ") x || hasPrefix (y + "=") x) (builtins.attrNames cfg.settings);
   commentedArray = concatStringsSep "\n" (map (x: if hasKey x != [] then "#" + x else x) originalArray);
   commentedFile = if cfg.settings == null then originalFile else commentedArray;
 
