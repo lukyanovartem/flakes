@@ -13,6 +13,7 @@ let
            , path ? ""
            , description ? ""
            , nginx ? true
+           , proxy ? true
            , ...
          }:
     {
@@ -24,7 +25,7 @@ let
       } // (optionalAttrs hasWidget {
         widget = {
           type = name;
-          url = "${protocol}://${host}:${toString port}";
+          url = if proxy then "${protocol}://${host}:${toString port}" else "${protocol}://${name}.${cfg.networking.hostName}";
         } // attrs;
       });
     };
@@ -34,15 +35,18 @@ let
             , port ? 80
             , websockets ? false
             , nginxAttrs ? {}
+            , proxy ? true
             , ...
           }:
     {
       "${name}.${cfg.networking.hostName}" = recursiveUpdate ({
         serverAliases = [ "${name}.${cfg.networking.fqdn}" ];
-        locations."/" = {
-          proxyPass = "${protocol}://${host}:${toString port}";
-          proxyWebsockets = websockets;
-        };
+        locations = optionalAttrs proxy ({
+          "/" = {
+            proxyPass = "${protocol}://${host}:${toString port}";
+            proxyWebsockets = websockets;
+          };
+        });
       } // cfg.attrs) nginxAttrs;
     };
   cond = x: isAttrs x && hasAttr "name" x;
