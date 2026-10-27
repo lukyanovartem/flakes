@@ -1,75 +1,101 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
   cfg = config.services.dashboard;
-  page = { name
-           , protocol ? "http"
-           , host ? "127.0.0.1"
-           , port ? 80
-           , attrs ? {}
-           , hasWidget ? true
-           , hasSiteMonitor ? false
-           , path ? ""
-           , description ? ""
-           , nginx ? true
-           , proxy ? true
-           , ...
-         }:
+  page =
+    {
+      name,
+      protocol ? "http",
+      host ? "127.0.0.1",
+      port ? 80,
+      attrs ? { },
+      hasWidget ? true,
+      hasSiteMonitor ? false,
+      path ? "",
+      description ? "",
+      nginx ? true,
+      proxy ? true,
+      icon ? null,
+      ...
+    }:
+    let
+      icon' = if icon != null then icon else "/icons/${name}.png";
+    in
     {
       "${name}" = rec {
         href = "//" + optionalString nginx "${name}." + "${cfg.networking.fqdn}/${path}";
-        icon = attrs.alticon or "${name}.png";
+        icon = icon';
         siteMonitor = optionalString hasSiteMonitor "${protocol}://${host}:${toString port}";
         inherit description;
-      } // (optionalAttrs hasWidget {
+      }
+      // (optionalAttrs hasWidget {
         widget = {
           type = name;
-          url = if proxy then "${protocol}://${host}:${toString port}" else "${protocol}://${name}.${cfg.networking.hostName}";
-        } // attrs;
+          url =
+            if proxy then
+              "${protocol}://${host}:${toString port}"
+            else
+              "${protocol}://${name}.${cfg.networking.hostName}";
+        }
+        // attrs;
       });
     };
-  nginx = { name
-            , protocol ? "http"
-            , host ? "127.0.0.1"
-            , port ? 80
-            , websockets ? false
-            , nginxAttrs ? {}
-            , proxy ? true
-            , ...
-          }:
+  nginx =
     {
-      "${name}.${cfg.networking.hostName}" = recursiveUpdate ({
-        serverAliases = [ "${name}.${cfg.networking.fqdn}" ];
-        locations = optionalAttrs proxy ({
-          "/" = {
-            proxyPass = "${protocol}://${host}:${toString port}";
-            proxyWebsockets = websockets;
-          };
-        });
-      } // cfg.attrs) nginxAttrs;
+      name,
+      protocol ? "http",
+      host ? "127.0.0.1",
+      port ? 80,
+      websockets ? false,
+      nginxAttrs ? { },
+      proxy ? true,
+      ...
+    }:
+    {
+      "${name}.${cfg.networking.hostName}" = recursiveUpdate (
+        {
+          serverAliases = [ "${name}.${cfg.networking.fqdn}" ];
+          locations = optionalAttrs proxy ({
+            "/" = {
+              proxyPass = "${protocol}://${host}:${toString port}";
+              proxyWebsockets = websockets;
+            };
+          });
+        }
+        // cfg.attrs
+      ) nginxAttrs;
     };
   cond = x: isAttrs x && hasAttr "name" x;
-  map' = cond: f: x:
+  map' =
+    cond: f: x:
     if cond x then
       f x
     else if isList x then
-      map (x: map' cond f x) (filter (x: x != {}) x)
+      map (x: map' cond f x) (filter (x: x != { }) x)
     else if isAttrs x then
       mapAttrs (n: v: map' cond f v) x
     else
       x;
-  flatten' = cond: f: x:
+  flatten' =
+    cond: f: x:
     flatten (
-    if cond x then
-      f x
-    else if isList x then
-      map (x: flatten' cond f x) x
-    else if isAttrs x then
-      map (y: flatten' cond f x."${y}") (attrNames x)
-    else
-      {});
-in {
+      if cond x then
+        f x
+      else if isList x then
+        map (x: flatten' cond f x) x
+      else if isAttrs x then
+        map (y: flatten' cond f x."${y}") (attrNames x)
+      else
+        { }
+    );
+in
+{
   options.services.dashboard = {
     enable = mkEnableOption "dashboard.";
     allservices = mkOption {
@@ -80,7 +106,7 @@ in {
     };
     attrs = mkOption {
       type = types.attrs;
-      default = {};
+      default = { };
     };
   };
 
@@ -94,7 +120,8 @@ in {
           proxyPass = "http://127.0.0.1:${toString config.services.homepage-dashboard.listenPort}";
         };
       };
-    } // mergeAttrsList (flatten' cond nginx (filter (x: x.nginx or true) cfg.allservices));
+    }
+    // mergeAttrsList (flatten' cond nginx (filter (x: x.nginx or true) cfg.allservices));
     services.homepage-dashboard.enable = true;
     services.homepage-dashboard.services = map' cond page cfg.allservices;
   };
