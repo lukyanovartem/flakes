@@ -1,8 +1,18 @@
-{ lib, stdenv, fetchurl, fetchgit, premake5, glfw, openal, mpg123, libsndfile, installShellFiles }:
+{ lib, stdenv, fetchurl, fetchgit, premake5, glfw, openal, mpg123, libsndfile, installShellFiles, makeWrapper, makeDesktopItem }:
 
-stdenv.mkDerivation rec {
+let
+  re3 = makeDesktopItem rec {
+    name = "re3";
+    exec = name;
+    icon = name;
+    comment = "Grand Theft Auto III";
+    genericName = comment;
+    desktopName = name;
+    categories = [ "Game" ];
+  };
+in stdenv.mkDerivation rec {
   pname = "re3";
-  version = "0.1";
+  version = "1.0";
 
   src' = fetchurl {
     url = "https://archive.org/download/github.com-GTAmodding-re3_-_2021-09-06_14-11-00/GTAmodding-re3_-_2021-09-06_14-11-00.bundle";
@@ -16,7 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ glfw openal mpg123 libsndfile ];
-  nativeBuildInputs = [ premake5 installShellFiles ];
+  nativeBuildInputs = [ premake5 installShellFiles makeWrapper ];
 
   preConfigure = ''
     patchShebangs printHash.sh
@@ -32,6 +42,11 @@ stdenv.mkDerivation rec {
     installBin ../bin/linux-amd64-librw_gl3_glfw-oal/Release/re3
     mkdir -p $out/share/games/re3
     cp -r ../gamefiles $out/share/games/re3
+    install -Dm644 ../res/images/logo.svg "$out/share/pixmaps/re3.svg"
+    wrapProgram $out/bin/re3 \
+      --run "cd ~/.config/re3"
+    mkdir -p $out/share/applications
+    ln -s ${re3}/share/applications/* $out/share/applications
   '';
   meta = with lib; {
     description = "GTA III engine";

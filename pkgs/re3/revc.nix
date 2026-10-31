@@ -1,6 +1,19 @@
-{ re3, fetchurl, fetchgit }:
+{ re3, fetchurl, fetchgit, makeDesktopItem }:
 
-re3.overrideAttrs (oldAttrs: rec {
+let
+  reVC = makeDesktopItem rec {
+    name = "reVC";
+    exec = name;
+    icon = name;
+    comment = "Grand Theft Auto: Vice City";
+    genericName = comment;
+    desktopName = name;
+    categories = [ "Game" ];
+  };
+in re3.overrideAttrs (oldAttrs: rec {
+  pname = "reVC";
+  version = "1.0";
+
   src' = fetchurl {
     url = "https://archive.org/download/github.com-GTAmodding-re3_-_2021-09-06_14-11-00/GTAmodding-re3_-_2021-09-06_14-11-00.bundle";
     sha256 = "sha256-A1y19ZgRrghlEPAr04F+r0OTPJcj5S26YIB/SMTp2cM=";
@@ -17,5 +30,10 @@ re3.overrideAttrs (oldAttrs: rec {
     installBin ../bin/linux-amd64-librw_gl3_glfw-oal/Release/reVC
     mkdir -p $out/share/games/revc
     cp -r ../gamefiles $out/share/games/revc
+    install -D {../res/images/logo,$out/share/pixmaps/reVC}.svg
+    wrapProgram $out/bin/reVC \
+      --run "cd ~/.config/reVC"
+    mkdir -p $out/share/applications
+    ln -s ${reVC}/share/applications/* $out/share/applications
   '';
 })
