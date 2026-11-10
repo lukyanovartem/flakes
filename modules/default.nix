@@ -6,7 +6,6 @@ rec {
   vscodium = ./vscodium.nix;
   zsh = ./zsh.nix;
   dashboard = ./dashboard.nix;
-  aula = ./aula.nix;
   cache = ./cache.nix;
   snapraid-daemon = ./snapraid-daemon.nix;
   b4 = ./b4.nix;
