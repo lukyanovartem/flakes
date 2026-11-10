@@ -47,6 +47,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   patches = [ ./keys.patch ];
 
+  postInstall = ''
+    cp -r packaging/share $out
+    mkdir -p $out/etc
+    mv $out/share/udev $out/etc
+  '';
+
   meta = {
     description = "Native Linux app for configuring AULA F87 Pro keyboards: lighting, key remapping, USB macros and local profiles. Built with Rust and GTK4";
     homepage = "https://github.com/meursault03/aula-f87pro-linux";
