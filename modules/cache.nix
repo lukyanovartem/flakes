@@ -53,7 +53,7 @@ in
             map (x: {
               name = "=/${x}/nix-cache-info";
               value = {
-                proxyPass = "http://127.0.0.1:${toString config.services.nix-serve.port}/nix-cache-info";
+                proxyPass = "http://${config.services.nix-serve.bindAddress}:${toString config.services.nix-serve.port}/nix-cache-info";
               };
             }) cfg.hosts
           ));
